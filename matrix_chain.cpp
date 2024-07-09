@@ -5,14 +5,17 @@ using namespace std;
 
 // Function to compute the optimal order of matrix multiplication
 void matrixChainOrder(int p[], int n, int** m, int** s) {
+    // Initialize m[i][i] to 0
     for (int i = 1; i <= n; i++) {
         m[i][i] = 0;
     }
-    for (int l = 2; l <= n; l++) {
-        for (int i = 1; i <= n - l + 1; i++) {
-            int j = i + l - 1;
+
+    // Calculate the minimum number of multiplications needed
+    for (int length = 2; length <= n; length++) {
+        for (int i = 1; i <= n - length + 1; i++) {
+            int j = i + length - 1;
             m[i][j] = INT_MAX;
-            for (int k = i; k <= j - 1; k++) {
+            for (int k = i; k < j; k++) {
                 int q = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j];
                 if (q < m[i][j]) {
                     m[i][j] = q;
@@ -56,6 +59,7 @@ int main() {
         s[i] = new int[n + 1];
     }
 
+    // Compute optimal order and print results
     matrixChainOrder(p, n, m, s);
 
     cout << "Minimum number of multiplications is " << m[1][n] << endl;
